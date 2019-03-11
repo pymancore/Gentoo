@@ -1,0 +1,76 @@
+eselect profile list
+
+eselect profile set NUM
+
+emerge --ask --changed-use --deep @world
+
+rc-update add dbus default
+
+echo "sys-auth/consolekit cgroups pm-utils policykit" >> /etc/portage/package.use/package.use
+
+emerge --ask --changed-use --deep @world
+
+emerge -av sys-auth/consolekit
+
+rc-update add consolekit boot
+
+emerge -av sys-auth/polkit
+
+echo "sys-fs/udisks lvm" >> /etc/portage/pacage.use/package.use
+
+emerge -av sys-fs/udisks
+
+echo "dev-qt/qtwebengine system-ffmpeg" >> /etc/portage/package.use/package.use
+
+emerge -av media-libs/libjpeg-turbo
+
+echo "kde-plasma/plasma-meta browser-integration crypt networkmanager pam plymouth pm-utils pulseaudio sddm wallpapers" > /etc/portage/package.use/package.use
+
+emerge --ask kde-plasma/plasma-meta
+
+emerge --ask --changed-use kde-plasma/systemsettings
+
+emerge --ask x11-misc/sddm
+
+nano /etc/conf.d/xdm
+{
+    DISPLAYMANAGER="sddm"
+    }
+
+rc-update add xdm default
+
+emerge --ask kde-plasma/sddm-kcm
+
+emerge --ask kde-apps/kwalletmanager
+
+emerge --ask kde-plasma/kwallet-pam
+
+nano /etc/pam.d/sddm
+{
+    -auth           optional        pam_kwallet5.so
+    -session        optional        pam_kwallet5.so auto_start
+    }
+    
+emerge -av kde-apps/kdeutils-meta
+
+emerge -av kde-apps/kdepim-meta
+
+emerge -av kde-apps/kdemultimedia-meta
+
+emerge -av kde-apps/kdegraphics-meta
+
+emerge -av kde-apps/kdecore-meta
+
+emerge -av kde-apps/kdeadmin-meta
+
+echo "mail-filter/spamassassin cron qmail" >> /etc/portage/package.use/package.use
+
+emerge -av mail-filter/spamassassin
+
+emerge -av kde-misc/plasma-redshift-control
+
+emerge -av kde-misc/kshutdown
+
+echo "app-antivirus/clamav clamdtop metadata-analysis-api xml bzip2 milter uclibc" >> /etc/portage/package.use/package.use
+
+emerge -av app-antivirus/clamav
