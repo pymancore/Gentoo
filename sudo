@@ -1,0 +1,11 @@
+echo "app-admin/sudo offensive openssl sendmail" >> /etc/portage/package.use/package.use
+
+emerge --ask app-admin/sudo
+
+visudo
+{
+    %wheel hostname=(ALL) ALL
+    Defaults:username timestamp_timeout=30
+    }
+
+echo "complete -cf sudo" >> /home/userneme/.bashrc
