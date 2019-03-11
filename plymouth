@@ -1,0 +1,38 @@
+echo "sys-kernel/genkernel-next cryptsetup plymouth" >> /etc/portage/package.use/package.use
+
+emerge --ask --verbose sys-boot/plymouth
+
+vim /etc/genkernel.conf
+{
+    # Enable splashutils in early space (initrd). Default is "no".
+    # SPLASH="no"
+    
+    # Installs (or not if set to "no") Plymouth into the initramfs. If "splash" will be
+    # passed to GRUB_CMDLINE_LINUX_DEFAULT at boot Plymouth will be activated.
+    PLYMOUTH="yes"
+    
+    # Embeds the given Plymouth theme into the initramfs.
+    PLYMOUTH_THEME="solar"
+    }
+    
+genkernel --udev initramfs
+
+emerge --ask --verbose sys-boot/plymouth-openrc-plugin
+
+vim /etc/rc.conf
+{
+    rc_interactive=”NO”
+    }
+
+vim /etc/default/grub
+{
+    GRUB_CMDLINE_LINUX_DEFAULT='quiet splash'
+    }
+
+grub-mkconfig -o /boot/grub/grub.cfg
+
+plymouth-set-default-theme --list
+
+plymouth-set-default-theme
+
+plymouth-set-default-theme tribar -R
