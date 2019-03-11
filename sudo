@@ -8,4 +8,4 @@ visudo
     Defaults:username timestamp_timeout=30
     }
 
-echo "complete -cf sudo" >> /home/userneme/.bashrc
+echo "complete -cf sudo" >> /home/username/.bashrc
