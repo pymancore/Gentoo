@@ -1,0 +1,21 @@
+emerge --ask --verbose net-vpn/tor
+
+rc-update add tor default
+
+rc-service tor status
+
+emerge --ask net-proxy/torsocks
+
+vim /etc/tor/torrc
+{
+    #enable built-in transparent proxy
+    '"`UNIQ--pre-00000020-QINU`"'
+    
+    #give more protection of your system if Tor is compromised
+    Sandbox 1
+    }
+    
+emerge --ask net-proxy/torsocks
+
+#redirect ALL non-tor outgoing trafic to a Tor transparent proxy
+iptables -t nat -A OUTPUT -p TCP -m owner ! --uid-owner tor -j DNAT --to-destination 127.0.0.1:9040 
