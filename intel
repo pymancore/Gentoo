@@ -1,0 +1,19 @@
+echo "x11-drivers/xf86-video-intel dri3 sna" >> /etc/portage/package.use/package.use
+
+emerge -av x11-drivers/xf86-video-intel
+
+nano /etc/X11/xorg.conf.d/20-modesetting.conf
+{
+    Section "Device"
+    Identifier  "Intel Graphics"
+    Driver      "modesetting"
+    Option      "AccelMethod"    "glamor"
+    Option      "DRI"            "3"
+    EndSection
+    }
+    
+emerge --ask --verbose x11-libs/libva
+
+echo "media-libs/vulkan-loader layers" >> /etc/portage/package.use/package.use
+
+emerge --ask --verbose media-libs/vulkan-loader
