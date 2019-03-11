@@ -1,0 +1,22 @@
+echo "www-client/firefox bindist -clang dbus eme-free -geckodriver -gmp-autoupdate lto -neon -screenshot startup-notification system-harfbuzz system-icu system-jpeg system-libevent system-libvpx system-sqlite wifi" >> /etc/portage/package.use/package.use
+
+equery uses www-client/firefox
+
+emerge -av www-client/firefox
+
+Special URLs
+{
+    about:addons
+    about:buildconfig
+    about:config
+    about:crashes
+    about:memory
+    about:networking
+    about:plugins
+    about:support
+    about:telemetry
+    }
+    
+xdg-mime default firefox.desktop x-scheme-handler/http
+xdg-mime default firefox.desktop x-scheme-handler/https
+xdg-mime default firefox.desktop text/html
