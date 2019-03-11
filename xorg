@@ -1,0 +1,32 @@
+nano -w /etc/portage/package.keywords
+{
+    x11-base/xorg-server
+    x11-base/xorg-drivers
+    x11-drivers/xf86-input-keyboard
+    x11-drivers/xf86-input-mouse
+    x11-drivers/xf86-input-evdev
+    x11-drivers/xf86-video-intel
+    }
+
+emerge -pv x11-base/xorg-drivers
+echo "x11-base/xorg-server -suid" >> /etc/portage/package.use/package.use
+
+emerge --ask x11-base/xorg-server
+
+groupadd input
+
+nano -w /etc/udev/rules.d/99-dev-input-group.rules
+{
+    SUBSYSTEM=="input", ACTION=="add", GROUP="input"
+    }
+    
+/etc/init.d/udev reload
+
+usermod -a -G input,video username
+
+env-update && source /etc/profile
+
+ls /etc/X11/Sessions/
+
+**startx
+
