@@ -1,0 +1,46 @@
+lsblk
+
+gdisk /dev/nvme0n1
+{
+    100 efi ef00 
+    
+    500 boot ext4 8300 
+    
+    remaining  8e00
+    }
+
+mkfs.fat -F 32 /dev/nvme0n1p1
+
+mkfs.ext4 -T small /dev/nvme0n1p2
+
+rc-service lvmetad start
+
+cryptsetup luksFormat -v -y -c aes-xts-plain64 -h sha512 -s 512 -i 10000 /dev/nvme0n1p3
+
+cryptsetup luksOpen /dev/nvme0n1p3 lvm
+
+lvm pvcreate /dev/mapper/cryptlvm
+
+vgcreate cryptlvm /dev/mapper/lvm
+
+lvcreate -L 50G -n root cryptlvm
+
+lvcreate -l 100%FREE -n home cryptlvm
+
+mkfs.ext4 -T small /dev/mapper/cryptlvm-root
+
+mkfs.ext4 -m 0 -T small /dev/mapper/cryptlvm-home
+
+mount /dev/mapper/cryptlvm-root /mnt/gentoo
+
+mount /dev/mapper/cryptlvm-home /mnt/gentoo/home
+
+mkdir /mnt/gentoo/boot
+
+mount /dev/nvme0n1p2 /mnt/gentoo/boot
+
+mkdir /mnt/gentoo/boot/efi
+
+mount /dev/nvme0n1p1 /mnt/gentoo/boot/efi 
+
+lsblk
